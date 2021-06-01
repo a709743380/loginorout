@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "管理員登錄";
+    List<account> Maccounts = ViewBag.Maccounts;
+}
+
+@if (ViewBag.Msession == null)
+{
+<form method="post" action="Manager/index">
+    <h2>@ViewData["Title"]</h2>
+    @Html.ActionLink("會員登錄", "Index", "Home")
+    <h1>@ViewBag.Mmanager</h1>
+    <div>
+        @Html.Label("賬號")
+    </div>
+    <div>
+        @Html.TextBox("UserId")
+    </div>
+    <div>
+        @Html.Label("密碼")
+    </div>
+    <div>
+        @Html.TextBox("Passwd")
+    </div>
+
+    <div>
+        <input type="submit" value="登錄" /> @Html.ActionLink("注冊", "Privacy")
+    </div>
+</form>
+
+
+}
+else
+
+{<h1>管理員</h1>
+    <h2>@ViewBag.Msession </h2>
+ <ul>
+     <li>@Html.ActionLink("新增賬號", "Privacy")</li>
+     <li>@Html.ActionLink("管理賬號", "Privacy")</li>
+     <li>@Html.ActionLink("修改密碼", "Privacy")</li>
+     <li>@Html.ActionLink("約定", "Privacy")</li>
+     <li>@Html.ActionLink("活動", "Privacy")</li>
+ </ul>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>編號</th>
+            <th>賬號</th>
+            <th>密碼</th>
+            <th>姓名</th>
+            <th></th>
+        </tr>
+    <thead>
+    <tbody>
+
+        @foreach (account user in Maccounts)
+        {
+            <tr>
+                <th>@user.fid</th>
+                <th>>@user.UserId</th>
+                <th>>@user.Passwd</th>
+                <th>>@user.UName</th>
+
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+}
+
+
