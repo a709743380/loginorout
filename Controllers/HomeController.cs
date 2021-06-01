@@ -31,33 +31,58 @@ namespace WebApplication5.Controllers
                 ViewBag.accounts = accounts;
             }
             return View();
-
-
         }
         [HttpPost]
         public IActionResult Index(account user)
         {
-           var merber = Dbuser.getAccounts().Where(m => m.UserId == user.UserId && m.Passwd == user.Passwd).FirstOrDefault();
+           var merber = Dbuser.getAccounts().Where(m => m.UserId == user.UserId).FirstOrDefault();
+           var Pmerber = Dbuser.getAccounts().Where(m => m.Passwd == user.Passwd).FirstOrDefault();
 
             if (merber!= null)
             {
-                HttpContext.Session.SetString("Name", merber.UName.ToString());
-                ViewBag.session = HttpContext.Session.GetString("Name");//在view 顯示使用者名稱
-                
-                return RedirectToAction("Index");
+                if (Pmerber != null)
+                {
+                    HttpContext.Session.SetString("Name", merber.UName.ToString());
+                    ViewBag.session = HttpContext.Session.GetString("Name");//在view 顯示使用者名稱
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.message = "密碼錯誤";
+                    return View();
+                }
             }
             else
             {
-                ViewBag.message = "賬號錯誤 重新登陸";
+                ViewBag.message = "賬號錯誤";
+                return View();
             }
-            return View();
-
         }
 
         public IActionResult LOGOUT()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Index");
+        }
+        public IActionResult Rgistered()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Rgistered(account user)
+        {
+            var merber = Dbuser.getAccounts().Where(m => m.UserId == user.UserId).FirstOrDefault();
+            if (merber == null)
+            {
+                ViewBag.Err = "";
+                Dbuser.setAccounts(user);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Err = "賬號重複";
+                return View();
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

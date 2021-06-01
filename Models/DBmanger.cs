@@ -41,16 +41,16 @@ namespace WebApplication5.Models
             sqlConnection.Close();
             return Maccounts;
         }
-        public void setAccounts(account user)
+        public void setAccounts(account Muser)
         {
             SqlConnection sqlconnection = new SqlConnection(connect);
-            string Sql = @"INSERT INTO account(userid,passwd,name) VALUES(@username,@passwd,@name)";
+            string Sql = @"INSERT INTO account(userid,passwd,name) VALUES(@Userid,@Passwd,@Uname)";
             SqlCommand sqlcommand = new SqlCommand(Sql);
             sqlcommand.Connection = sqlconnection;
 
-            sqlcommand.Parameters.Add(new SqlParameter("@username", user.UserId));
-            sqlcommand.Parameters.Add(new SqlParameter("@passwd", user.Passwd));
-            sqlcommand.Parameters.Add(new SqlParameter("@name", user.UName));
+            sqlcommand.Parameters.Add(new SqlParameter("@Userid", Muser.UserId));
+            sqlcommand.Parameters.Add(new SqlParameter("@Passwd", Muser.Passwd));
+            sqlcommand.Parameters.Add(new SqlParameter("@Uname", Muser.UName));
 
             sqlconnection.Open();
             sqlcommand.ExecuteNonQuery();
