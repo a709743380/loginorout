@@ -28,29 +28,24 @@ namespace WebApplication5.Controllers
     [HttpPost]
         public IActionResult Index(account Muser)
         {
-            
-            var Mmerber = DBM.getAccounts().Where(Mum => Mum.UserId == Muser.UserId).FirstOrDefault();
-            var MPmerber = DBM.getAccounts().Where(Mpm => Mpm.Passwd == Muser.Passwd).FirstOrDefault();
-
-            if (Mmerber != null)
-            {
-                if (MPmerber != null)
-                {
-                    HttpContext.Session.SetString("MName", Mmerber.UName.ToString());
-                    ViewBag.session = HttpContext.Session.GetString("MName");//在view 顯示使用者名稱
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ViewBag.Mmessage = "密碼錯誤";
-                    return View();
-                }
-            }
-            else
+            if (DBM.Login(Muser) == "No_UserId")
             {
                 ViewBag.Mmessage = "賬號錯誤";
                 return View();
             }
+            else if(DBM.Login(Muser) == "No_Passwd")
+            {
+                ViewBag.Mmessage = "密碼錯誤";
+                return View();
+            }
+            else
+            {
+                ViewBag.Mmessage ="";
+                HttpContext.Session.SetString("MName", DBM.Login(Muser));
+                ViewBag.Msession = HttpContext.Session.GetString("MName");//在view 顯示使用者名稱
+                return RedirectToAction("Index");
+            }
+
         }
         public IActionResult Privacy()
         {

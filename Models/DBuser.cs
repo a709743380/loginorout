@@ -56,6 +56,31 @@ namespace WebApplication5.Models
             sqlcommand.ExecuteNonQuery();
             sqlconnection.Close();
         }
+        public string Login(account user)
+        {
+            SqlConnection sqlConnection = new SqlConnection(connect);
+            SqlCommand sqlCommand = new SqlCommand("select * from account where userid='" + user.UserId + "'");
+            sqlCommand.Connection = sqlConnection;
+            sqlConnection.Open();
+
+            SqlDataReader Reader = sqlCommand.ExecuteReader();
+            if (Reader.HasRows)
+            {
+                if (Reader.Read())
+                {
+                    if (Reader["passwd"].ToString() == user.Passwd)
+                    {
+                        return Reader["name"].ToString();
+                    }
+                    else
+                    {
+                        return "No_Passwd";
+                    }
+                }
+            }
+            sqlConnection.Close();
+            return "No_UserId";
+        }
     }
 }
 
