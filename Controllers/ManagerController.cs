@@ -66,11 +66,12 @@ namespace WebApplication5.Controllers
         [HttpPost]
         public IActionResult Rgistered(account Muser)
         {
-            var Mmerber = DBM.getAccounts().Where(Mum => Mum.UserId == Muser.UserId).FirstOrDefault();
-            if (Mmerber == null)
+            if (DBM.setAccounts(Muser))
             {
-                ViewBag.MErr = "";
+                ViewBag.Err = "";
                 DBM.setAccounts(Muser);
+                HttpContext.Session.SetString("Name", Muser.UName);
+                ViewBag.session = HttpContext.Session.GetString("Name");
                 return RedirectToAction("Index");
             }
             else

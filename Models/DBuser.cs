@@ -41,20 +41,36 @@ namespace WebApplication5.Models
             sqlConnection.Close();
             return accounts;
         }
-        public void setAccounts(account user)
+        public bool setAccounts(account user)
         {
             SqlConnection sqlconnection = new SqlConnection(connect);
-            string Sql = @"INSERT INTO account(userid,passwd,name) VALUES(@Userid,@Passwd,@Uname)";
-            SqlCommand sqlcommand = new SqlCommand(Sql);
-            sqlcommand.Connection = sqlconnection;
-
-            sqlcommand.Parameters.Add(new SqlParameter("@Userid", user.UserId));
-            sqlcommand.Parameters.Add(new SqlParameter("@Passwd", user.Passwd));
-            sqlcommand.Parameters.Add(new SqlParameter("@Uname", user.UName));
-
+            string Sql = "select * from account where userid='" + user.UserId + "'";
+            SqlCommand sqlCommand = new SqlCommand(Sql);
+            sqlCommand.Connection = sqlconnection;
             sqlconnection.Open();
-            sqlcommand.ExecuteNonQuery();
-            sqlconnection.Close();
+
+            SqlDataReader Reader = sqlCommand.ExecuteReader();
+
+            if (Reader.HasRows==false)
+            {
+                if (Reader.Read()==false)
+                {
+                    Reader.Close();
+
+                    Sql = @"INSERT INTO account(userid,passwd,name) VALUES(@Userid,@Passwd,@Uname)";
+                    SqlCommand sqlcommand = new SqlCommand(Sql);
+                    sqlcommand.Connection = sqlconnection;
+
+                    sqlcommand.Parameters.Add(new SqlParameter("@Userid", user.UserId));
+                    sqlcommand.Parameters.Add(new SqlParameter("@Passwd", user.Passwd));
+                    sqlcommand.Parameters.Add(new SqlParameter("@Uname", user.UName));
+
+                    sqlcommand.ExecuteNonQuery();
+                    sqlconnection.Close();
+                    return true;
+                }
+            }
+            return false;
         }
         public string Login(account user)
         {

@@ -21,12 +21,13 @@ namespace WebApplication5.Controllers
         {
             _logger = logger;
         }
-        DBuser Dbuser = new DBuser();
+       // private DBuser Dbuser = new DBuser();
         public IActionResult Index()
         {
-            List<account> accounts = Dbuser.getAccounts();
             if (HttpContext.Session.Keys.Contains("Name"))
             {
+                DBuser Dbuser = new DBuser();
+                 List<account> accounts = Dbuser.getAccounts();
                 ViewBag.session = HttpContext.Session.GetString("Name");
                 ViewBag.accounts = accounts;
             }
@@ -35,19 +36,31 @@ namespace WebApplication5.Controllers
         [HttpPost]
         public IActionResult Index(account user)
         {
-           var merber = Dbuser.getAccounts()
-                .Where(m => m.UserId == user.UserId && m.Passwd == user.Passwd).FirstOrDefault();
-            if (merber!= null)
-            {
-                ViewBag.message = "";
-                HttpContext.Session.SetString("Name", merber.UName.ToString());
-                ViewBag.session = HttpContext.Session.GetString("Name");//在view 顯示使用者名稱
-                return RedirectToAction("Index");
+            if(user.UserId!=null || user.Passwd != null)
+            { 
+                DBuser Dbuser = new DBuser();
+                if (Dbuser.Login(user) == "No_UserId")
+                {
+                    ViewBag.message = "賬號錯誤";
+                    return View();
+                }
+                else if (Dbuser.Login(user) == "No_Passwd")
+                {
+                    ViewBag.message = "密碼錯誤";
+                    return View();
+                }
+                else
+                {
+                    ViewBag.message = "";
+                    HttpContext.Session.SetString("Name", Dbuser.Login(user));
+                    ViewBag.session = HttpContext.Session.GetString("Name");//在view 顯示使用者名稱
+                    return RedirectToAction("Index");
+                }
+
             }
             else
             {
-                ViewBag.message = "賬號或密碼錯誤";
-                return View();
+                return RedirectToAction("Index");
             }
         }
 
@@ -63,22 +76,19 @@ namespace WebApplication5.Controllers
         [HttpPost]
         public IActionResult Rgistered(account user)
         {
-            if (Dbuser.Login(user) == "No_UserId")
+            DBuser Dbuser = new DBuser();
+            if (Dbuser.setAccounts(user))
             {
-                ViewBag.message = "賬號錯誤";
-                return View();
-            }
-            else if (Dbuser.Login(user) == "No_Passwd")
-            {
-                ViewBag.message = "密碼錯誤";
-                return View();
+                ViewBag.Err = "";
+                Dbuser.setAccounts(user);
+                HttpContext.Session.SetString("Name",user.UName);
+                ViewBag.session = HttpContext.Session.GetString("Name");
+                return RedirectToAction("Index");
             }
             else
             {
-                ViewBag.message = "";
-                HttpContext.Session.SetString("Name", Dbuser.Login(user));
-                ViewBag.session = HttpContext.Session.GetString("Name");//在view 顯示使用者名稱
-                return RedirectToAction("Index");
+                ViewBag.Err = "賬號重複";
+                return View();
             }
         }
 
