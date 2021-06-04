@@ -1,43 +1,32 @@
 ﻿@{
     ViewData["Title"] = "管理員登錄";
     List<account> Maccounts = ViewBag.Maccounts;
+    @model WebApplication5.Models.account
 }
 
 @if (ViewBag.Msession == null)
 {
-    <form method="post" action="~/Manager/Index" >
-        <div class="text-center">
-            <h2>@ViewData["Title"]</h2>
-            <h1>@ViewBag.Mmessage</h1>
-            <div>
-                @Html.Label("賬號")
-            </div>
-            <div>
-                <input type="text" name="UserId" />
-            </div>
-            <div>
-                @Html.Label("密碼")
-            </div>
-            <div>
-                <input type="text" name="Passwd" />
-            </div>
-
-            <div>
-                <input type="submit" value="登錄" /> @Html.ActionLink("注冊","Rgistered","Manager")
-            </div>
-            @Html.ActionLink("會員登錄", "Index", "Home")
-        </div>
-    </form>
+<form method="post" action="~/Manager/Index">
+    <h2>@ViewData["Title"]</h2>
+    <h1>@ViewBag.Mmessage</h1>
+    <div class="form-group row">
+        賬號 @Html.TextBoxFor(account => account.UserId, new { @class = "form-control", placeholder = "請輸入賬號" })
+    </div>
+    <div class="form-group row">
+        密碼 @Html.TextBoxFor(account => account.Passwd, new { @class = "form-control", placeholder = "請輸入密碼" })
+    </div>
+    <input type="submit" value="登錄">
+</form>
+    @Html.ActionLink("會員登錄", "Index", "Home")
 }
 else
 
 {<h1>管理員</h1>
-    <h2>@ViewBag.Msession </h2>
+    <h2>姓名:@ViewBag.Msession </h2>
     <ul>
-        <li>@Html.ActionLink("新增賬號", "Privacy")</li>
+        <li>@Html.ActionLink("注冊", "Rgistered", "Manager")</li>
         <li>@Html.ActionLink("管理賬號", "Privacy")</li>
         <li>@Html.ActionLink("修改密碼", "Privacy")</li>
-        <li>@Html.ActionLink("約定", "Privacy")</li>
         <li>@Html.ActionLink("活動", "Privacy")</li>
         <li>@Html.ActionLink("登出", "Logout")</li>
     </ul>
@@ -56,7 +45,7 @@ else
             @foreach (account user in Maccounts)
             {
                 <tr>
-                    <th>@user.fid</th>
+                    <th>@user.Fid</th>
                     <th>>@user.UserId</th>
                     <th>>@user.Passwd</th>
                     <th>>@user.UName</th>

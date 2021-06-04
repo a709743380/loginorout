@@ -26,7 +26,7 @@ namespace WebApplication5.Models
                 {
                     account Maccount = new account()
                     {
-                        fid = Reader.GetInt32(Reader.GetOrdinal("id")).ToString(),
+                        Fid = Reader.GetInt32(Reader.GetOrdinal("id")).ToString(),
                         UserId = Reader.GetString(Reader.GetOrdinal("userid")),
                         Passwd = Reader.GetString(Reader.GetOrdinal("passwd")),
                         UName = Reader.GetString(Reader.GetOrdinal("name")),

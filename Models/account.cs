@@ -9,23 +9,30 @@ namespace WebApplication5.Models
 {
     public class account
     {
-        public string fid { get; set; }
+        public string Fid { get; set; } = " ";
+        [DisplayName("姓名")]
+        [Required]
+        public string UName { get; set; } = " ";
 
         [DisplayName("賬號")]
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = " ";
 
         [DisplayName("密碼")]
         [Required]
-        public string Passwd { get; set; }
+        public string Passwd { get; set; } = " ";
 
-        [DisplayName("姓名")]
+        [DisplayName("性別")]
         [Required]
-        public string UName { get; set; }
+        public string UGender{ get; set; } = " ";
 
         [DisplayName("電子郵箱")]
         [Required]
-        [EmailAddress]
-        public string UEmail { get; set; }
+        public string UEmail { get; set; } = " ";
+
+        [DisplayName("社區地址")]
+        [Required]
+        public string UAddress { get; set; } = " ";
+        
     }
 }

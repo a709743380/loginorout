@@ -51,6 +51,23 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Privacy(Modify modify)
+        {
+            if (HttpContext.Session.Keys.Contains("MName"))
+            {
+                M_Passwd m_passwd = new M_Passwd();
+                try
+                {
+                    m_passwd.modify_passwd(modify);
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Message = e.Message;
+                }
+            }
+            return View();
+        }
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
@@ -71,7 +88,7 @@ namespace WebApplication5.Controllers
                 ViewBag.Err = "";
                 DBM.setAccounts(Muser);
                 HttpContext.Session.SetString("Name", Muser.UName);
-                ViewBag.session = HttpContext.Session.GetString("Name");
+                ViewBag.Msession = HttpContext.Session.GetString("Name");
                 return RedirectToAction("Index");
             }
             else

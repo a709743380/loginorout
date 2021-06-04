@@ -26,10 +26,12 @@ namespace WebApplication5.Models
                 {
                     account account = new account()
                     {
-                        fid = Reader.GetInt32(Reader.GetOrdinal("id")).ToString(),
                         UserId = Reader.GetString(Reader.GetOrdinal("userid")),
                         Passwd = Reader.GetString(Reader.GetOrdinal("passwd")),
                         UName = Reader.GetString(Reader.GetOrdinal("name")),
+                        UGender = Reader.GetString(Reader.GetOrdinal("Gender")),
+                        UEmail = Reader.GetString(Reader.GetOrdinal("Email")),
+                        UAddress = Reader.GetString(Reader.GetOrdinal("Address")),
                     };
                     accounts.Add(account);
                 }
@@ -57,13 +59,17 @@ namespace WebApplication5.Models
                 {
                     Reader.Close();
 
-                    Sql = @"INSERT INTO account(userid,passwd,name) VALUES(@Userid,@Passwd,@Uname)";
+                    Sql = @"INSERT INTO account(userid,passwd,name,Email,Gender,Address)
+                            VALUES(@Userid,@Passwd,@Uname,@UEmail,@UGender,@UAddress)";
                     SqlCommand sqlcommand = new SqlCommand(Sql);
                     sqlcommand.Connection = sqlconnection;
 
                     sqlcommand.Parameters.Add(new SqlParameter("@Userid", user.UserId));
                     sqlcommand.Parameters.Add(new SqlParameter("@Passwd", user.Passwd));
                     sqlcommand.Parameters.Add(new SqlParameter("@Uname", user.UName));
+                    sqlcommand.Parameters.Add(new SqlParameter("@UEmail", user.UEmail));
+                    sqlcommand.Parameters.Add(new SqlParameter("@UGender", user.UGender));
+                    sqlcommand.Parameters.Add(new SqlParameter("@UAddress", user.UAddress));
 
                     sqlcommand.ExecuteNonQuery();
                     sqlconnection.Close();

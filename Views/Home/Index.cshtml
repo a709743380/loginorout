@@ -20,18 +20,17 @@
         @Html.Label("密碼")
     </div>
     <div>
-        <input type="text"  id="inputPasswd" name="Passwd" class="form-control" />
+        <input type="text" id="inputPasswd" name="Passwd" class="form-control" />
     </div>
 
     <div>
-        <input type="submit" value="登錄" /> @Html.ActionLink("注冊", "Rgistered","Home")
+        <input type="submit" value="登錄" /> @Html.ActionLink("注冊", "Rgistered", "Home")
     </div>
 }
     @Html.ActionLink("管理員登錄", "Index", "Manager")
 }
 else
-
-{<h1>會員 </h1>
+{ <h1>會員 </h1>
     <h2>@ViewBag.session </h2>
     <ul>
 
@@ -43,30 +42,30 @@ else
     <form method="post" action="Home/LOGOUT">
         <button onclick="logout">登出</button>
     </form>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>編號</th>
-                <th>賬號</th>
-                <th>密碼</th>
-                <th>姓名</th>
-                <th></th>
-            </tr>
-        <thead>
-        <tbody>
-
-            @foreach (account user in accounts)
-            {
+    <table class="table">
+        @foreach (account user in accounts)
+        {
+           <tr>
+               <th>名字</th>
+               <td>@user.UName</td>
+               <th>賬號</th>
+               <td>@user.UserId</td>
+               <th>密碼</th>
+               <td>@user.Passwd</td>
+           </tr>
                 <tr>
-                    <th>@user.fid</th>
-                    <th>>@user.UserId</th>
-                    <th>>@user.Passwd</th>
-                    <th>>@user.UName</th>
-
+                    <th>性別</th>
+                    <td>@user.UGender</td>
                 </tr>
-            }
-        </tbody>
-
+                <tr>
+                    <th>電子郵箱</th>
+                    <td>@user.UEmail</td>
+                </tr>
+                <tr>
+                    <th>社區地址</th>
+                    <td>@user.UAddress</td>
+                </tr>
+        }
     </table>
 
 
