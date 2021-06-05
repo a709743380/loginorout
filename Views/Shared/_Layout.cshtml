@@ -6,6 +6,15 @@
     <title>@ViewData["Title"] - WebApplication5</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
+           @if(Html.Raw(TempData["message"]).ToString() == "修改成功")
+           {
+               <script type="text/javascript">
+                   
+                   alert("@Html.Raw(TempData["message"])");
+                   //@TempData["message"] = null;
+               </script>
+    }
 </head>
 <body>
     <header>

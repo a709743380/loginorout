@@ -26,6 +26,7 @@ namespace WebApplication5.Controllers
         {
             if (HttpContext.Session.Keys.Contains("Name"))
             {
+
                 DBuser Dbuser = new DBuser();
                  List<account> accounts = Dbuser.getAccounts();
                 ViewBag.session = HttpContext.Session.GetString("Name");
@@ -53,7 +54,9 @@ namespace WebApplication5.Controllers
                 {
                     ViewBag.message = "";
                     HttpContext.Session.SetString("Name", Dbuser.Login(user));
+                    HttpContext.Session.SetString("UserId", user.UserId);
                     ViewBag.session = HttpContext.Session.GetString("Name");//在view 顯示使用者名稱
+                    ViewBag.UserId = HttpContext.Session.GetString("UserId");
                     return RedirectToAction("Index");
                 }
 
@@ -82,7 +85,9 @@ namespace WebApplication5.Controllers
                 ViewBag.Err = "";
                 Dbuser.setAccounts(user);
                 HttpContext.Session.SetString("Name",user.UName);
+                HttpContext.Session.SetString("Name", user.UserId);
                 ViewBag.session = HttpContext.Session.GetString("Name");
+                ViewBag.UserId = HttpContext.Session.GetString("UserId");
                 return RedirectToAction("Index");
             }
             else
@@ -91,6 +96,52 @@ namespace WebApplication5.Controllers
                 return View();
             }
         }
+        public IActionResult modify_passwd()
+        {
+            if (HttpContext.Session.Keys.Contains("UserId"))
+            {
+                ViewBag.session = HttpContext.Session.GetString("UserId");
+            }
+            return View();
+        }
+        [HttpPost]
+        public IActionResult modify_passwd(Modify user)
+        {
+            if (HttpContext.Session.Keys.Contains("UserId"))
+            {
+                ViewBag.session = HttpContext.Session.GetString("UserId");
+                user.UserId= HttpContext.Session.GetString("UserId");
+                DBuser m_passwd = new DBuser();
+                if (user.Oldpasswd != user.Passwd)
+                {
+                    if (user.NewPasswd == user.Passwd)
+                    {
+                        if (m_passwd.modify_passwd(user) == "Pass")
+                        {
+                            TempData["message"] = "修改成功";
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+
+                            TempData["message"] = "舊密碼錯誤";
+                            return View();
+                        }
+                    }
+                    else
+                    {
+                        TempData["message"] = "新密碼輸入不一致";
+                        return View();
+                    }
+                }
+                else
+                {
+                    TempData["message"] = "不可與原密碼相同";
+                }
+            }
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

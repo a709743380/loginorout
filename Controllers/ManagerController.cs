@@ -21,6 +21,7 @@ namespace WebApplication5.Controllers
             if (HttpContext.Session.Keys.Contains("MName"))
             {
                 ViewBag.Msession = HttpContext.Session.GetString("MName");
+                ViewBag.MUserId = HttpContext.Session.GetString("MUserId");
                 ViewBag.Maccounts = Maccounts;
             }
             return View();
@@ -42,31 +43,55 @@ namespace WebApplication5.Controllers
             {
                 ViewBag.Mmessage ="";
                 HttpContext.Session.SetString("MName", DBM.Login(Muser));
+                HttpContext.Session.SetString("MUserId", Muser.UserId);
                 ViewBag.Msession = HttpContext.Session.GetString("MName");//在view 顯示使用者名稱
+                ViewBag.MUserId = HttpContext.Session.GetString("MUserId");
                 return RedirectToAction("Index");
             }
 
         }
         public IActionResult Privacy()
         {
+            if (HttpContext.Session.Keys.Contains("MUserId"))
+            {
+                ViewBag.MUserId = HttpContext.Session.GetString("MUserId");
+            }
             return View();
         }
         [HttpPost]
-        public IActionResult Privacy(Modify modify)
+        public IActionResult Privacy(Modify user)
         {
-            if (HttpContext.Session.Keys.Contains("MName"))
+            if (HttpContext.Session.Keys.Contains("MUserId"))
             {
-                M_Passwd m_passwd = new M_Passwd();
-                try
+                ViewBag.MUserId = HttpContext.Session.GetString("MUserId");
+                user.UserId = HttpContext.Session.GetString("MUserId");
+                if (user.Oldpasswd != user.Passwd)
                 {
-                    m_passwd.modify_passwd(modify);
+                    if (user.NewPasswd == user.Passwd)
+                    {
+                        if (DBM.modify_passwd(user) == "Pass")
+                        {
+                            TempData["message"] = "修改成功";
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            TempData["message"] = "舊密碼錯誤";
+                             return View(); 
+                        }
+                    }
+                    else
+                    {
+                        TempData["message"] = "新密碼輸入不一致";
+                         return View(); ;
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    ViewBag.Message = e.Message;
+                    TempData["message"] = "不可與原密碼相同";
                 }
             }
-            return View();
+            return View(); ;
         }
         public IActionResult Logout()
         {

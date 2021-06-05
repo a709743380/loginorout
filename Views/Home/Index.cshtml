@@ -35,7 +35,7 @@ else
     <ul>
 
         <li>@Html.ActionLink("管理賬號", "Login", "UserLogin")</li>
-        <li>@Html.ActionLink("修改密碼", "Privacy")</li>
+        <li>@Html.ActionLink("修改密碼", "modify_passwd")</li>
         <li>@Html.ActionLink("約定", "Privacy")</li>
         <li>@Html.ActionLink("活動", "Privacy")</li>
     </ul>
@@ -53,18 +53,6 @@ else
                <th>密碼</th>
                <td>@user.Passwd</td>
            </tr>
-                <tr>
-                    <th>性別</th>
-                    <td>@user.UGender</td>
-                </tr>
-                <tr>
-                    <th>電子郵箱</th>
-                    <td>@user.UEmail</td>
-                </tr>
-                <tr>
-                    <th>社區地址</th>
-                    <td>@user.UAddress</td>
-                </tr>
         }
     </table>
 

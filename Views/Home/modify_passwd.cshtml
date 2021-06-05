@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "修改密碼";
+    ViewData["ERR"] = "請先登錄";
+}
+
+@if (ViewBag.session != null)
+{
+<form method="post" >
+    <h2>@ViewData["Title"]</h2>
+    <h1>@TempData["message"]</h1>
+    <div class="form-group row">
+        密碼: <input type="password" placeholder=" 請輸入原密碼" required="required" id="inputOldPasswd"name="OldPasswd" class="form-control" />
+    </div>
+    <div class="form-group row">
+        新密碼: <input type="password" placeholder=" 請輸入新密碼" required="required" id="inputnewPasswd" name="Passwd" class="form-control" />
+    </div>
+    <div class="form-group row">
+        再次輸入新密碼: <input type="password" placeholder=" 再次請輸入新密碼" required="required" id="inputNewPasswd" name="NewPasswd" class="form-control" />
+    </div>
+
+    <input type="submit" value="修改">
+</form>
+}
+
+

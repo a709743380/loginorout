@@ -98,6 +98,36 @@ namespace WebApplication5.Models
             sqlConnection.Close();
             return "No_UserId";
         }
+        public string modify_passwd(Modify Muser)
+        {
+            SqlConnection sqlconnection = new SqlConnection(connect);
+            string Sql = "select * from account where userid='" + Muser.UserId + "'";
+            SqlCommand sqlCommand = new SqlCommand(Sql);
+            sqlconnection.Open();
+            sqlCommand.Connection = sqlconnection;
+            SqlDataReader Reader = sqlCommand.ExecuteReader();
+            if (Reader.HasRows)
+            {
+                if (Reader.Read())
+                {
+                    if (Reader["passwd"].ToString() == Muser.Oldpasswd)
+                    {
+                        Reader.Close();
+                        Sql = $"UPDATE account SET passwd='{Muser.NewPasswd}' WHERE userid='{Muser.UserId}'";
+                        SqlCommand sqlcommand = new SqlCommand(Sql);
+                        sqlcommand.Connection = sqlconnection;
+                        sqlcommand.ExecuteNonQuery();
+                        sqlconnection.Close();
+                        return "Pass";
+                    }
+                    else
+                    {
+                        return " old_passwd_err";
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
 

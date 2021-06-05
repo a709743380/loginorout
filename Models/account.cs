@@ -21,18 +21,5 @@ namespace WebApplication5.Models
         [DisplayName("密碼")]
         [Required]
         public string Passwd { get; set; } = " ";
-
-        [DisplayName("性別")]
-        [Required]
-        public string UGender{ get; set; } = " ";
-
-        [DisplayName("電子郵箱")]
-        [Required]
-        public string UEmail { get; set; } = " ";
-
-        [DisplayName("社區地址")]
-        [Required]
-        public string UAddress { get; set; } = " ";
-        
     }
 }
