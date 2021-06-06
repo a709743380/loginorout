@@ -3,8 +3,36 @@
     List<account> accounts = ViewBag.accounts;
 }
 
-@if (ViewBag.session == null)
+@if (ViewBag.session != null)
 {
+    {<h1>會員 </h1>
+        <h2>@ViewBag.session </h2>
+        <ul>
+
+            <li>@Html.ActionLink("管理賬號", "Personal")</li>
+            <li>@Html.ActionLink("修改密碼", "modify_passwd")</li>
+            <li>@Html.ActionLink("約定", "Privacy")</li>
+            <li>@Html.ActionLink("活動", "Privacy")</li>
+        </ul>
+        <form method="post" action="Home/LOGOUT">
+            <button onclick="logout">登出</button>
+        </form>
+        <table class="table">
+            @foreach (account user in accounts)
+            {
+                <tr>
+                    <th>名字</th>
+                    <td>@user.UName</td>
+                    <th>賬號</th>
+                    <td>@user.UserId</td>
+                    <th>密碼</th>
+                    <td>@user.Passwd</td>
+                </tr>
+            }
+        </table>
+    }
+}
+else
     @using (Html.BeginForm())
 
     {<h2>@ViewData["Title"]</h2>
@@ -20,43 +48,14 @@
         @Html.Label("密碼")
     </div>
     <div>
-        <input type="text" id="inputPasswd" name="Passwd" class="form-control" />
+        <input type="password" id="inputPasswd" name="Passwd" class="form-control" />
     </div>
 
     <div>
         <input type="submit" value="登錄" /> @Html.ActionLink("注冊", "Rgistered", "Home")
     </div>
 }
-    @Html.ActionLink("管理員登錄", "Index", "Manager")
-}
-else
-{ <h1>會員 </h1>
-    <h2>@ViewBag.session </h2>
-    <ul>
+@Html.ActionLink("管理員登錄", "Index", "Manager")
 
-        <li>@Html.ActionLink("管理賬號", "Login", "UserLogin")</li>
-        <li>@Html.ActionLink("修改密碼", "modify_passwd")</li>
-        <li>@Html.ActionLink("約定", "Privacy")</li>
-        <li>@Html.ActionLink("活動", "Privacy")</li>
-    </ul>
-    <form method="post" action="Home/LOGOUT">
-        <button onclick="logout">登出</button>
-    </form>
-    <table class="table">
-        @foreach (account user in accounts)
-        {
-           <tr>
-               <th>名字</th>
-               <td>@user.UName</td>
-               <th>賬號</th>
-               <td>@user.UserId</td>
-               <th>密碼</th>
-               <td>@user.Passwd</td>
-           </tr>
-        }
-    </table>
-
-
-}
 
 

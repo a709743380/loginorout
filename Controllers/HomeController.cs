@@ -26,7 +26,6 @@ namespace WebApplication5.Controllers
         {
             if (HttpContext.Session.Keys.Contains("Name"))
             {
-
                 DBuser Dbuser = new DBuser();
                  List<account> accounts = Dbuser.getAccounts();
                 ViewBag.session = HttpContext.Session.GetString("Name");
@@ -59,7 +58,6 @@ namespace WebApplication5.Controllers
                     ViewBag.UserId = HttpContext.Session.GetString("UserId");
                     return RedirectToAction("Index");
                 }
-
             }
             else
             {
@@ -69,11 +67,22 @@ namespace WebApplication5.Controllers
 
         public IActionResult LOGOUT()
         {
-            HttpContext.Session.Clear();
+            if (HttpContext.Session.Keys.Contains("Name"))
+            {
+                if (TempData["message"] != null)
+                {
+                    TempData["message"] = null;
+                }
+                else
+                {
+                    HttpContext.Session.Clear();
+                }
+            }
             return RedirectToAction("Index");
         }
         public IActionResult Rgistered()
         {
+            ViewBag.session = HttpContext.Session.GetString("Name");
             return View();
         }
         [HttpPost]
@@ -96,19 +105,21 @@ namespace WebApplication5.Controllers
                 return View();
             }
         }
-        public IActionResult modify_passwd()
+        public IActionResult modify_passwd()//修改密碼沒有登錄時候返回登錄界面
         {
-            if (HttpContext.Session.Keys.Contains("UserId"))
+            if (HttpContext.Session.Keys.Contains("Name"))
             {
-                ViewBag.session = HttpContext.Session.GetString("UserId");
+                ViewBag.session = HttpContext.Session.GetString("Name");
+                return View();
             }
-            return View();
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
         [HttpPost]
         public IActionResult modify_passwd(Modify user)
         {
-            if (HttpContext.Session.Keys.Contains("UserId"))
-            {
                 ViewBag.session = HttpContext.Session.GetString("UserId");
                 user.UserId= HttpContext.Session.GetString("UserId");
                 DBuser m_passwd = new DBuser();
@@ -119,7 +130,7 @@ namespace WebApplication5.Controllers
                         if (m_passwd.modify_passwd(user) == "Pass")
                         {
                             TempData["message"] = "修改成功";
-                            return RedirectToAction("Index");
+                            return RedirectToAction("Logout");
                         }
                         else
                         {
@@ -138,7 +149,35 @@ namespace WebApplication5.Controllers
                 {
                     TempData["message"] = "不可與原密碼相同";
                 }
+            return View();
+        }
+        public IActionResult Personal()
+        {
+            if(HttpContext.Session.Keys.Contains("Name"))
+            {
+                DB_person myself = new DB_person();
+                ViewBag.session = HttpContext.Session.GetString("Name");
+                List<Person> information = myself.getinformation();
+                ViewBag.information = information;
+                return View();
             }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+        [HttpPost]
+        public IActionResult Personal(Person newself)
+        {
+            
+            newself.userid=HttpContext.Session.GetString("UserId");
+            ViewBag.session = HttpContext.Session.GetString("Name");
+            DB_person myself = new DB_person();
+            myself.SetUserid(newself.userid);//確保userid存在
+            myself.Setinf(newself);//更新資料
+
+            List<Person> information = myself.getinformation();
+            ViewBag.information = information;//顯示資料
             return View();
         }
 

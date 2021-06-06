@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "個人資料";
+    List<Person> personal = ViewBag.information;
+    ViewBag.address = "";
+    ViewBag.tel = "";
+}
+
+@if (ViewBag.session != null)
+{
+    <h2>@ViewBag.test</h2>
+    @using (Html.BeginForm())
+    {@foreach (Person newinf in personal)
+        {
+            ViewBag.address = newinf.NewAddress;
+            ViewBag.tel = newinf.User_tel;
+
+        }
+    <form method="post">
+        <div class="form-group">
+
+            <div>
+
+                聯絡地址:<p>@Html.Raw(ViewBag.address).ToString()</p>
+                <div>
+                    地址<input type="text" name="NewAddress" id="address" class=col-lg-10 placeholder="請輸入新地址">
+                </div>
+            </div>
+            <hr width="100%">
+            <div>
+                聯絡電話：<p>@ViewBag.tel</p>
+                <div>
+                    電話<input type="tel" name="User_tel" id="address" class=col-lg-10 placeholder="請輸入新電話">
+                </div>
+                <br />
+            </div>
+            <hr>
+
+            <div style="text-align:right">
+                <input type="submit" class="btn btn-info" name="updata" value="更新" />
+            </div>
+        </div>
+    </form>
+        }
+    }
+else
+{
+    <h1>請先登錄</h1>
+}
+
+
+
+

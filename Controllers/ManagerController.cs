@@ -72,7 +72,7 @@ namespace WebApplication5.Controllers
                         if (DBM.modify_passwd(user) == "Pass")
                         {
                             TempData["message"] = "修改成功";
-                            return RedirectToAction("Index");
+                            return RedirectToAction("Logout");
                         }
                         else
                         {
@@ -95,8 +95,14 @@ namespace WebApplication5.Controllers
         }
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
-
+            if(TempData["message"] != null) { 
+                TempData["message"] = null;
+            }
+            else
+            {
+                HttpContext.Session.Clear();
+                
+            }
             return RedirectToAction("Index");
         }
         public IActionResult Rgistered()
