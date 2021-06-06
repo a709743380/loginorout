@@ -10,16 +10,19 @@
     <h2>@ViewBag.test</h2>
     @using (Html.BeginForm())
     {@foreach (Person newinf in personal)
-        {
-            ViewBag.address = newinf.NewAddress;
-            ViewBag.tel = newinf.User_tel;
+            {
+                ViewBag.address = newinf.NewAddress;
+                ViewBag.tel = newinf.User_tel;
 
-        }
+            }
+        @Html.ActionLink("<<<返回","Index")
+        <br/>
+        <br/>
+
     <form method="post">
         <div class="form-group">
 
             <div>
-
                 聯絡地址:<p>@Html.Raw(ViewBag.address).ToString()</p>
                 <div>
                     地址<input type="text" name="NewAddress" id="address" class=col-lg-10 placeholder="請輸入新地址">
