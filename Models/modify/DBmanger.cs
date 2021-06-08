@@ -10,7 +10,7 @@ namespace WebApplication5.Models
     public class DBmanger
     {
         private readonly string connect = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=manager;User ID=QQ;Password=123456;Trusted_Connection=True";
-        public List<account> getAccounts()
+        public List<account> GetAccounts()
         {
             List<account> Maccounts = new List<account>();
 
@@ -41,7 +41,7 @@ namespace WebApplication5.Models
             sqlConnection.Close();
             return Maccounts;
         }
-        public bool setAccounts(account Muser)
+        public bool SetAccounts(account Muser)
         {
             SqlConnection sqlconnection = new SqlConnection(connect);
             string Sql = "select * from account where userid='" + Muser.UserId + "'";
@@ -98,7 +98,7 @@ namespace WebApplication5.Models
             sqlConnection.Close();
             return "No_UserId";
         }
-        public string modify_passwd(Modify Muser)
+        public string Modify_passwd(Modify Muser)
         {
             SqlConnection sqlconnection = new SqlConnection(connect);
             string Sql = "select * from account where userid='" + Muser.UserId + "'";

@@ -6,18 +6,20 @@
 
 @if (ViewBag.Msession == null)
 {
-<form method="post" action="~/Manager/Index">
-    <h2>@ViewData["Title"]</h2>
-    <h1>@ViewBag.Mmessage</h1>
-    <div class="form-group row">
-        賬號 @Html.TextBoxFor(account => account.UserId, new { @class = "form-control", placeholder = "請輸入賬號" })
-    </div>
-    <div class="form-group row">
-        密碼 @Html.TextBoxFor(account => account.Passwd, new {  @class = "form-control",type="password", placeholder = "請輸入密碼" })
-    </div>
-    <input type="submit" value="登錄">
-</form>
-    @Html.ActionLink("會員登錄", "Index", "Home")
+    <h1 style="color:green">@ViewData["Title"]</h1>
+    @Html.ActionLink("會員登錄", "Index", "Home", new { }, new { @class = "btn btn-outline-info", @style = " float:right" })
+    <br />
+    <br />
+    <h2 style="color:red">@ViewBag.Mmessage</h2>
+    <form method="post" action="~/Manager/Index">
+        <div class="form-group row">
+            賬號 @Html.TextBoxFor(account => account.UserId, new { @class = "form-control", placeholder = "請輸入賬號" })
+        </div>
+        <div class="form-group row">
+            密碼 @Html.TextBoxFor(account => account.Passwd, new { @class = "form-control", type = "password", placeholder = "請輸入密碼" })
+        </div>
+        <input type="submit" value="登錄" class=" btn btn-success" />
+    </form>
 }
 else
 

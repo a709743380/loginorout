@@ -13,12 +13,13 @@
             原密碼: <input type="password" placeholder=" 請輸入原密碼" required="required" id="inputOldPasswd" name="OldPasswd" class="form-control" />
         </div>
         <div class="form-group row">
-            新密碼: <input type="password" placeholder=" 請輸入新密碼" required="required" id="inputPasswd" name="Passwd" class="form-control" />
+            新密碼: <input type="password" placeholder=" 請輸入新密碼（開頭為字母,且包含數字共至少5位）" required="required" id="inputPasswd" name="Passwd" class="form-control" />
         </div>
         <div class="form-group row">
             再次輸入新密碼: <input type="password" placeholder=" 再次請輸入新密碼" required="required" id="inputNewPasswd" name="NewPasswd" class="form-control" />
         </div>
-        <input id="button" type="submit" value="修改">
+        <a href="~/Manager/index" class="btn btn-outline-success" style=" float:left"> 返回</a>
+        <input id="button" class="btn btn-success" type="submit" value="修改" style=" float:right"/>
     </form>
 
     }

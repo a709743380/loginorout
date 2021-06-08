@@ -5,7 +5,7 @@
 
 @if (ViewBag.session != null)
 {
-    {<h1>會員 </h1>
+    {<h1>會員</h1>
         <h2>@ViewBag.session </h2>
         <ul>
 
@@ -35,9 +35,11 @@
 else
     @using (Html.BeginForm())
 
-    {<h2>@ViewData["Title"]</h2>
+    {<h1 style=" color:dodgerblue">@ViewData["Title"]</h1>
+    @Html.ActionLink("管理員登錄", "Index", "Manager", new { }, new { @class = "btn btn-outline-success", @style = " float:right" })
+        <br/><br />
+    <h2>@ViewBag.message</h2>
 
-    <h1>@ViewBag.message</h1>
     <div>
         @Html.Label("賬號")
     </div>
@@ -50,12 +52,13 @@ else
     <div>
         <input type="password" id="inputPasswd" name="Passwd" class="form-control" />
     </div>
-
     <div>
-        <input type="submit" value="登錄" /> @Html.ActionLink("注冊", "Rgistered", "Home")
+        <br/>
+        <input type="submit" value="登錄" class=" btn btn-info" />
+        @Html.ActionLink("注冊", "Rgistered", new { }, new { @class = "btn btn-info", @style = " float:right" })
+        <!--第一個new可能放ID 刪掉第二個會沒反映-->
     </div>
 }
-@Html.ActionLink("管理員登錄", "Index", "Manager")
 
 
 

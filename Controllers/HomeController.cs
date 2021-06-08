@@ -8,8 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication5.Models;
 using System.Web;
-
-
+using System.Text.RegularExpressions;
 
 namespace WebApplication5.Controllers
 {
@@ -88,20 +87,30 @@ namespace WebApplication5.Controllers
         [HttpPost]
         public IActionResult Rgistered(account user)
         {
-            DBuser Dbuser = new DBuser();
-            if (Dbuser.setAccounts(user))
+            bool id1 = Regex.IsMatch(user.UserId, "^[a-z0-9A-Z]{6,}$");
+            bool id2 = Regex.IsMatch(user.Passwd, "^[a-zA-Z]{1,}[0-9]{4,}$");
+            if (id1 && id2)
             {
-                ViewBag.Err = "";
-                Dbuser.setAccounts(user);
-                HttpContext.Session.SetString("Name",user.UName);
-                HttpContext.Session.SetString("Name", user.UserId);
-                ViewBag.session = HttpContext.Session.GetString("Name");
-                ViewBag.UserId = HttpContext.Session.GetString("UserId");
-                return RedirectToAction("Index");
+                DBuser Dbuser = new DBuser();
+                if (Dbuser.setAccounts(user))
+                {
+                    ViewBag.Err = "";
+                    Dbuser.setAccounts(user);
+                    HttpContext.Session.SetString("Name", user.UName);
+                    HttpContext.Session.SetString("Name", user.UserId);
+                    ViewBag.session = HttpContext.Session.GetString("Name");
+                    ViewBag.UserId = HttpContext.Session.GetString("UserId");
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Err = "賬號重複";
+                    return View();
+                }
             }
             else
             {
-                ViewBag.Err = "賬號重複";
+                ViewBag.Err = "賬號或密碼格式錯誤";
                 return View();
             }
         }

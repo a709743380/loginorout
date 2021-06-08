@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication5.Models;
 using System.Web;
-
+using System.Text.RegularExpressions;
 
 namespace WebApplication5.Controllers
 {
@@ -17,7 +17,7 @@ namespace WebApplication5.Controllers
         DBmanger DBM = new DBmanger();
         public IActionResult Index()
         {
-            List<account> Maccounts = DBM.getAccounts();
+            List<account> Maccounts = DBM.GetAccounts();
             if (HttpContext.Session.Keys.Contains("MName"))
             {
                 ViewBag.Msession = HttpContext.Session.GetString("MName");
@@ -65,33 +65,43 @@ namespace WebApplication5.Controllers
             {
                 ViewBag.MUserId = HttpContext.Session.GetString("MUserId");
                 user.UserId = HttpContext.Session.GetString("MUserId");
+                bool id2 = Regex.IsMatch(user.Passwd, "^[a-zA-Z]{1,}[0-9]{4,}$");
+
                 if (user.Oldpasswd != user.Passwd)
                 {
-                    if (user.NewPasswd == user.Passwd)
+                    if (id2)
                     {
-                        if (DBM.modify_passwd(user) == "Pass")
+                        if (user.NewPasswd == user.Passwd)
                         {
-                            TempData["message"] = "修改成功";
-                            return RedirectToAction("Logout");
+                            if (DBM.Modify_passwd(user) == "Pass")
+                            {
+                                TempData["message"] = "修改成功";
+                                return RedirectToAction("Logout");
+                            }
+                            else
+                            {
+                                TempData["message"] = "舊密碼錯誤";
+                                return View();
+                            }
                         }
                         else
                         {
-                            TempData["message"] = "舊密碼錯誤";
-                             return View(); 
+                            TempData["message"] = "新密碼輸入不一致";
+                            return View();
                         }
                     }
                     else
                     {
-                        TempData["message"] = "新密碼輸入不一致";
-                         return View(); ;
+                        TempData["message"] = "密碼格式錯誤";
                     }
                 }
                 else
                 {
                     TempData["message"] = "不可與原密碼相同";
+                    return View();
                 }
             }
-            return View(); ;
+            return View();
         }
         public IActionResult Logout()
         {
@@ -107,26 +117,34 @@ namespace WebApplication5.Controllers
         }
         public IActionResult Rgistered()
         {
-
-
             return View();
         }
         [HttpPost]
         public IActionResult Rgistered(account Muser)
         {
-            if (DBM.setAccounts(Muser))
+            bool id1 = Regex.IsMatch(Muser.UserId, "^[a-z0-9A-Z]{6,}$");
+            bool id2 = Regex.IsMatch(Muser.Passwd, "^[a-zA-Z]{1,}[0-9]{4,}$");
+            if(id2 &&id1)
             {
-                ViewBag.Err = "";
-                DBM.setAccounts(Muser);
-                HttpContext.Session.SetString("Name", Muser.UName);
-                ViewBag.Msession = HttpContext.Session.GetString("Name");
-                return RedirectToAction("Index");
+                if (DBM.SetAccounts(Muser))
+                {
+                    ViewBag.Err = "";
+                    DBM.SetAccounts(Muser);
+                    HttpContext.Session.SetString("Name", Muser.UName);
+                    ViewBag.Msession = HttpContext.Session.GetString("Name");
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.MErr = "賬號重複";
+                    
+                }
             }
             else
             {
-                ViewBag.MErr = "賬號重複";
-                return View();
+                ViewBag.MErr = "賬號或密碼格式錯誤";
             }
+            return View();
         }
     }
     
